@@ -36,23 +36,29 @@ jobs:
         #     echo "${GITHUB_WORKSPACE}/git-cinnabar" >> $GITHUB_ENV
       - name: Build
         env:
-          # PATH: ${{ runner.workspace }}/git-cinnabar:${{ env.PATH }}
           MOZCONFIG: ${{ env.HOME }}/mozconfigs/optimized
         run: |
-          echo \n export PATH='"$PATH:'$(pwd)/git-cinnabar\" >> ~/.bashrc
+          python3 -m pip install --user mercurial
+          hg version
+
+          echo "" >> ~/.bashrc
+          echo export PATH='$PATH:~/git-cinnabar' >> ~/.bashrc
+          echo 'export PATH="'"$(python3 -m site --user-base)"'/bin:$PATH"' >> ~/.bashrc
+
+          # echo \n export PATH='"$PATH:'$(pwd)/git-cinnabar\" >> ~/.bashrc
           source ~/.bashrc
 
           echo $PATH
           echo $MOZCONFIG
-          export PATH="$PATH:$(pwd)/git-cinnabar"
-          echo $PATH
+          # export PATH="$PATH:$(pwd)/git-cinnabar"
+          # echo $PATH
 
-          python3 --version
-          # python3 -m pip install --user mercurial
-          # hg version
+          # python3 --version
+          # # python3 -m pip install --user mercurial
+          # # hg version
 
-          mkdir git-cinnabar
-          cd git-cinnabar
+          mkdir ~/git-cinnabar
+          cd ~/git-cinnabar
           wget https://raw.githubusercontent.com/glandium/git-cinnabar/master/download.py
           python3 ./download.py
           git cinnabar setup
@@ -61,11 +67,11 @@ jobs:
           cp -r ./mozconfigs $HOME/mozconfigs
           # export MOZCONFIG=$HOME/mozconfigs/optimized
 
-          # wget https://hg.mozilla.org/mozilla-central/raw-file/default/python/mozboot/bin/bootstrap.py
+          wget https://hg.mozilla.org/mozilla-central/raw-file/default/python/mozboot/bin/bootstrap.py
           # To use Git as your VCS
-          # python3 bootstrap.py
+          python3 bootstrap.py
 
-          git clone https://github.com/mozilla/gecko-dev.git mozilla-unified --depth=1
+          # git clone https://github.com/mozilla/gecko-dev.git mozilla-unified --depth=1
 
           cd mozilla-unified
           # hg up -C central
