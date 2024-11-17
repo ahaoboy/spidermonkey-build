@@ -16,9 +16,6 @@ on:
 jobs:
   build-x86_64-unknown-linux-gnu:
     runs-on: ubuntu-latest
-    env:
-      PATH: ${{ runner.workspace }}/git-cinnabar:${{ env.PATH }}
-      MOZCONFIG: $HOME/mozconfigs/optimized
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -38,6 +35,9 @@ jobs:
         #   run: |
         #     echo "${GITHUB_WORKSPACE}/git-cinnabar" >> $GITHUB_ENV
       - name: Build
+        env:
+          PATH: ${{ runner.workspace }}/git-cinnabar:${{ env.PATH }}
+          MOZCONFIG: $HOME/mozconfigs/optimized
         run: |
           echo $PATH
           echo $MOZCONFIG
