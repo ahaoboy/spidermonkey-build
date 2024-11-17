@@ -44,7 +44,7 @@ jobs:
           git clone https://github.com/mozilla/gecko-dev.git mozilla-unified --depth=1
 
           cd mozilla-unified
-          hg up -C central
+          # hg up -C central
           sudo bash ./mach bootstrap
           sudo bash ./mach build
           sudo apt install tree -y
