@@ -28,7 +28,7 @@ jobs:
 
       - name: Build
         env:
-          MOZCONFIG: ${{ github.workspace }}/optimized
+          MOZCONFIG: ${{ github.workspace }}/mozconfigs/debug
         run: |
           # mkdir -p $HOME/mozconfigs
           # cp ./optimized $HOME/mozconfigs/optimized
