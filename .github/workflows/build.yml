@@ -44,6 +44,8 @@ jobs:
 
           echo $PATH
           echo $MOZCONFIG
+          export PATH="$PATH:$(pwd)/git-cinnabar"
+          echo $PATH
 
           python3 --version
           # python3 -m pip install --user mercurial
