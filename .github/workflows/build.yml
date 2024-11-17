@@ -45,8 +45,8 @@ jobs:
 
           cd mozilla-unified
           # hg up -C central
-          sudo bash ./mach bootstrap
-          sudo bash ./mach build
+          sudo ./mach bootstrap
+          sudo ./mach build
           sudo apt install tree -y
           tree ./ > tree.txt
 
