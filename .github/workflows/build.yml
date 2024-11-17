@@ -37,7 +37,7 @@ jobs:
           python3 -m pip install --user mercurial
           hg version
 
-          curl https://hg.mozilla.org/mozilla-central/raw-file/default/python/mozboot/bin/bootstrap.py -O
+          wget https://hg.mozilla.org/mozilla-central/raw-file/default/python/mozboot/bin/bootstrap.py
           # To use Git as your VCS
           python3 bootstrap.py --vcs=git
 
