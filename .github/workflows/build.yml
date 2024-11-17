@@ -39,7 +39,7 @@ jobs:
 
           wget https://hg.mozilla.org/mozilla-central/raw-file/default/python/mozboot/bin/bootstrap.py
           # To use Git as your VCS
-          python3 bootstrap.py --vcs=git
+          python3 bootstrap.py
 
           # git clone https://github.com/mozilla/gecko-dev.git --depth=1
 
