@@ -15,21 +15,21 @@ on:
 
 jobs:
   build-x86_64-unknown-linux-gnu:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      # - uses: actions-rust-lang/setup-rust-toolchain@v1
-      #   with:
-      #     rustflags: "-A warnings"
-      #     toolchain: "nightly"
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          rustflags: "-A warnings"
+          toolchain: "nightly"
 
-      - name: rust
-        run: |
-          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain nightly
+      # - name: rust
+      #   run: |
+      #     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain nightly
 
       # - name: config
       #   run: |
