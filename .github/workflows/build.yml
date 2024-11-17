@@ -1,0 +1,39 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build-v8:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: config
+        run: |
+          git clone https://github.com/mozilla/gecko-dev.git --depth=1
+          mkdir -p $HOME/mozconfigs
+          cp ./optimized $HOME/mozconfigs/optimized
+          export MOZCONFIG=$HOME/mozconfigs/debug
+
+
+
+      - name: Build
+        run: |
+          cd gecko-dev
+          ./mach build
+          sudo apt install tree -y
+          tree ./ > tree.txt
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: spidermonkey-build
+          path: ./gecko-dev/.mozbuild,./gecko-dev/tree.txt
