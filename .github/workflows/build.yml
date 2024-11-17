@@ -36,9 +36,12 @@ jobs:
         #     echo "${GITHUB_WORKSPACE}/git-cinnabar" >> $GITHUB_ENV
       - name: Build
         env:
-          PATH: ${{ runner.workspace }}/git-cinnabar:${{ env.PATH }}
-          MOZCONFIG: $HOME/mozconfigs/optimized
+          # PATH: ${{ runner.workspace }}/git-cinnabar:${{ env.PATH }}
+          MOZCONFIG: ${{ env.HOME }}/mozconfigs/optimized
         run: |
+          echo export PATH="$PATH:$(pwd)/git-cinnabar" >> ~/.bashrc
+          source ~/.bashrc
+
           echo $PATH
           echo $MOZCONFIG
 
