@@ -39,7 +39,7 @@ jobs:
           # PATH: ${{ runner.workspace }}/git-cinnabar:${{ env.PATH }}
           MOZCONFIG: ${{ env.HOME }}/mozconfigs/optimized
         run: |
-          echo export PATH="$PATH:$(pwd)/git-cinnabar" >> ~/.bashrc
+          echo \n export PATH='"$PATH:'$(pwd)/git-cinnabar\" >> ~/.bashrc
           source ~/.bashrc
 
           echo $PATH
