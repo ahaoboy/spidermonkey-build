@@ -26,12 +26,11 @@ jobs:
       - name: config
         run: |
           git clone https://github.com/mozilla/gecko-dev.git --depth=1
-          mkdir -p $HOME/mozconfigs
-          cp ./optimized $HOME/mozconfigs/optimized
-          export MOZCONFIG=$HOME/mozconfigs/optimized
 
       - name: Build
         run: |
+          mkdir -p $HOME/mozconfigs
+          cp ./optimized $HOME/mozconfigs/optimized
           export MOZCONFIG=$HOME/mozconfigs/optimized
 
           cd gecko-dev
