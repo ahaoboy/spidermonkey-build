@@ -29,9 +29,10 @@ jobs:
 
       - name: Build
         run: |
-          mkdir -p $HOME/mozconfigs
-          cp ./optimized $HOME/mozconfigs/optimized
-          export MOZCONFIG=$HOME/mozconfigs/optimized
+          # mkdir -p $HOME/mozconfigs
+          # cp ./optimized $HOME/mozconfigs/optimized
+          # export MOZCONFIG=$HOME/mozconfigs/optimized
+          export MOZCONFIG=$(pwd)/optimized
 
           cd gecko-dev
           ./mach build
