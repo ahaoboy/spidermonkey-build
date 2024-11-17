@@ -7,6 +7,8 @@ ac_add_options --enable-optimize
 # Disable debug checks to better match a release build of Firefox.
 ac_add_options --disable-debug
 
+# ac_add_options --enable-artifact-builds
+
 # Use a separate objdir for optimized builds to allow easy
 # switching between optimized and debug builds while developing.
 mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/obj-opt-@CONFIG_GUESS@

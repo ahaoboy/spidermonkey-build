@@ -19,24 +19,24 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
-      # - uses: actions/setup-python@v5
-      #   with:
-      #     python-version: "3.10"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
       - name: config
         run: |
           git clone https://github.com/mozilla/gecko-dev.git --depth=1
 
       - name: Build
-        env:
-          MOZCONFIG: ${{ github.workspace }}/mozconfigs/debug
+        # env:
+          # MOZCONFIG: ${{ github.workspace }}/mozconfigs/debug
         run: |
           # mkdir -p $HOME/mozconfigs
-          # cp ./optimized $HOME/mozconfigs/optimized
-          # export MOZCONFIG=$HOME/mozconfigs/optimized
+          cp -r ./mozconfigs $HOME/mozconfigs
+          export MOZCONFIG=$HOME/mozconfigs/optimized
           # export MOZCONFIG=$(pwd)/optimized
 
           cd gecko-dev
-          ./mach build
+          sudo ./mach build
           sudo apt install tree -y
           tree ./ > tree.txt
 
