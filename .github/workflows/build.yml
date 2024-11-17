@@ -47,7 +47,7 @@ jobs:
           cd git-cinnabar
           wget https://raw.githubusercontent.com/glandium/git-cinnabar/master/download.py
           python3 ./download.py
-          export PATH=$PATH:$(pwd)/git-cinnabar
+          export PATH=$PATH:$(pwd)
           git cinnabar setup
           cd ..
 
