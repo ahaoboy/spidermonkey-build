@@ -38,17 +38,19 @@ jobs:
         env:
           MOZCONFIG: ${{ env.HOME }}/mozconfigs/optimized
         run: |
+          cp -r ./mozconfigs $HOME/mozconfigs
+
           python3 -m pip install --user mercurial
           hg version
 
           cargo install --locked git-cinnabar
 
-          echo "" >> ~/.bashrc
-          echo export PATH='$PATH:~/git-cinnabar' >> ~/.bashrc
-          echo 'export PATH="'"$(python3 -m site --user-base)"'/bin:$PATH"' >> ~/.bashrc
+          # echo "" >> ~/.bashrc
+          # echo export PATH='$PATH:~/git-cinnabar' >> ~/.bashrc
+          # echo 'export PATH="'"$(python3 -m site --user-base)"'/bin:$PATH"' >> ~/.bashrc
 
           # echo \n export PATH='"$PATH:'$(pwd)/git-cinnabar\" >> ~/.bashrc
-          source ~/.bashrc
+          # source ~/.bashrc
 
           echo $PATH
           echo $MOZCONFIG
@@ -59,14 +61,13 @@ jobs:
           # # python3 -m pip install --user mercurial
           # # hg version
 
-          mkdir ~/git-cinnabar
-          cd ~/git-cinnabar
-          wget https://raw.githubusercontent.com/glandium/git-cinnabar/master/download.py
-          python3 ./download.py
-          git cinnabar setup
-          cd ..
+          # mkdir ~/git-cinnabar
+          # cd ~/git-cinnabar
+          # wget https://raw.githubusercontent.com/glandium/git-cinnabar/master/download.py
+          # python3 ./download.py
+          # git cinnabar setup
+          # cd ..
 
-          cp -r ./mozconfigs $HOME/mozconfigs
           # export MOZCONFIG=$HOME/mozconfigs/optimized
 
           wget https://hg.mozilla.org/mozilla-central/raw-file/default/python/mozboot/bin/bootstrap.py
