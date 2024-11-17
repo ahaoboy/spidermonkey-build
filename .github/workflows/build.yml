@@ -22,10 +22,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - uses: actions-rust-lang/setup-rust-toolchain@v1
-        with:
-          rustflags: "-A warnings"
-          toolchain: "nightly"
+      # - uses: actions-rust-lang/setup-rust-toolchain@v1
+      #   with:
+      #     rustflags: "-A warnings"
+      #     toolchain: "nightly"
 
       # - name: rust
       #   run: |
