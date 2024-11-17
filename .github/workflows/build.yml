@@ -37,16 +37,14 @@ jobs:
           python3 -m pip install --user mercurial
           hg version
 
-          wget https://hg.mozilla.org/mozilla-central/raw-file/default/python/mozboot/bin/bootstrap.py
+          # wget https://hg.mozilla.org/mozilla-central/raw-file/default/python/mozboot/bin/bootstrap.py
           # To use Git as your VCS
-          python3 bootstrap.py
+          # python3 bootstrap.py
 
-          # git clone https://github.com/mozilla/gecko-dev.git --depth=1
+          git clone https://github.com/mozilla/gecko-dev.git mozilla-unified --depth=1
 
           cd mozilla-unified
           hg up -C central
-
-          # cd gecko-dev
           sudo bash ./mach bootstrap
           sudo bash ./mach build
           sudo apt install tree -y
