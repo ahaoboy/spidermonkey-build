@@ -26,24 +26,29 @@ jobs:
         with:
           rustflags: "-A warnings"
           toolchain: "nightly"
+
+      - name: config
+        run: |
+          echo "${GITHUB_WORKSPACE}/git-cinnabar" >> $GITHUB_ENV
+
       - name: Build
         # env:
           # MOZCONFIG: ${{ github.workspace }}/mozconfigs/debug
         run: |
+          python3 --version
+          # python3 -m pip install --user mercurial
+          # hg version
+
           mkdir git-cinnabar
           cd git-cinnabar
           wget https://raw.githubusercontent.com/glandium/git-cinnabar/master/download.py
           python3 ./download.py
-          export PATH=$PATH:$(pwd)
+          export PATH=$PATH:$(pwd)/git-cinnabar
           git cinnabar setup
           cd ..
 
           cp -r ./mozconfigs $HOME/mozconfigs
           export MOZCONFIG=$HOME/mozconfigs/optimized
-
-          python3 --version
-          python3 -m pip install --user mercurial
-          hg version
 
           # wget https://hg.mozilla.org/mozilla-central/raw-file/default/python/mozboot/bin/bootstrap.py
           # To use Git as your VCS
