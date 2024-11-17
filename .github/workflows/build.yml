@@ -31,10 +31,10 @@ jobs:
           # mkdir -p $HOME/mozconfigs
           # cp ./optimized $HOME/mozconfigs/optimized
           # export MOZCONFIG=$HOME/mozconfigs/optimized
-          export MOZCONFIG=$(pwd)/optimized
+          # export MOZCONFIG=$(pwd)/optimized
 
           cd gecko-dev
-          ./mach build
+          ./mach build --enable-project=js --enable-optimize --disable-debug
           sudo apt install tree -y
           tree ./ > tree.txt
 
