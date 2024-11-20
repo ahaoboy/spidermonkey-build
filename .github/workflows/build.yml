@@ -32,10 +32,7 @@ jobs:
           sudo apt install ccache llvm clang lld meson ninja-build -y
       - uses: actions-rs/toolchain@v1
         with:
-          profile: minimal
           toolchain: stable
-          override: true
-          default: true
       - name: Get SM pkg
         run: ./tools/get_sm.sh
       - name: ccache cache files
@@ -45,6 +42,8 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/mozjs.tar.xz') }}
       - name: Build SpiderMonkey
         run: |
+          cargo install cbindgen --force
+
           mkdir -p /tmp/mozjs
           tar -xf mozjs.tar.xz -C /tmp/mozjs
           cd /tmp/mozjs
