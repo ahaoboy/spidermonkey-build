@@ -1,0 +1,9 @@
+﻿---
+BasedOnStyle: Google
+
+# Prevent the loss of indentation with these macros
+MacroBlockBegin: "^JS_BEGIN_MACRO$"
+MacroBlockEnd: "^JS_END_MACRO$"
+
+SortIncludes: false
+...

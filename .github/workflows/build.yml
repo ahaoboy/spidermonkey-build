@@ -1,4 +1,4 @@
-name: Build
+name: Spidermonkey
 
 permissions:
   contents: write
@@ -9,85 +9,88 @@ on:
       - "main"
     tags:
       - v*
-  schedule:
-    - cron: "0 0 * * 1"
   pull_request:
+
+env:
+  SHELL: /bin/bash
+  # ccache
+  CCACHE: ccache
+  # use clang/lld
+  CXX: clang++
+  CC: clang
+  LDFLAGS: -fuse-ld=lld
+  LD_LIBRARY_PATH: /usr/local/lib
 
 jobs:
   build-x86_64-unknown-linux-gnu:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-      - uses: actions-rust-lang/setup-rust-toolchain@v1
-        with:
-          rustflags: "-A warnings"
-          # toolchain: "nightly"
-
-        # - name: rust
-        #   run: |
-        #     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain nightly
-
-        # - name: config
-        #   run: |
-        #     echo "${GITHUB_WORKSPACE}/git-cinnabar" >> $GITHUB_ENV
-      - name: Build
-        env:
-          MOZCONFIG: ${{ env.HOME }}/mozconfigs/optimized
+      - uses: actions/checkout@v2
+      - name: Install deps
         run: |
-          cp -r ./mozconfigs $HOME/mozconfigs
+          sudo apt install ccache llvm clang lld meson ninja-build -y
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+          default: true
+      - name: Get SM pkg
+        run: ./tools/get_sm.sh
+      - name: ccache cache files
+        uses: actions/cache@v1.1.0
+        with:
+          path: ~/.ccache
+          key: ${{ runner.os }}-${{ hashFiles('**/mozjs.tar.xz') }}
+      - name: Build SpiderMonkey
+        run: |
+          mkdir -p /tmp/mozjs
+          tar -xf mozjs.tar.xz -C /tmp/mozjs
+          cd /tmp/mozjs
+          cd $(ls -d */|head -n 1)
+          cd js/src
+          bash $GITHUB_WORKSPACE/tools/generic_lib.sh $GITHUB_WORKSPACE/meson.build
+          mkdir _build
+          cd _build
+          # ../configure --disable-jemalloc --with-system-zlib --with-intl-api --enable-debug --enable-optimize
+          ../configure --with-system-zlib --with-intl-api --enable-optimize --disable-debug
+          ccache -z
+          make
+          sudo make install
+          ccache -s
 
-          python3 -m pip install --user mercurial
-          hg version
+          cd ..
+          cp -r ./_build/dist/bin /tmp/mozjz_build
 
-          cargo install --locked git-cinnabar
-
-          # echo "" >> ~/.bashrc
-          # echo export PATH='$PATH:~/git-cinnabar' >> ~/.bashrc
-          # echo 'export PATH="'"$(python3 -m site --user-base)"'/bin:$PATH"' >> ~/.bashrc
-
-          # echo \n export PATH='"$PATH:'$(pwd)/git-cinnabar\" >> ~/.bashrc
-          # source ~/.bashrc
-
-          echo $PATH
-          echo $MOZCONFIG
-          # export PATH="$PATH:$(pwd)/git-cinnabar"
-          # echo $PATH
-
-          # python3 --version
-          # # python3 -m pip install --user mercurial
-          # # hg version
-
-          # mkdir ~/git-cinnabar
-          # cd ~/git-cinnabar
-          # wget https://raw.githubusercontent.com/glandium/git-cinnabar/master/download.py
-          # python3 ./download.py
-          # git cinnabar setup
-          # cd ..
-
-          # export MOZCONFIG=$HOME/mozconfigs/optimized
-
-          wget https://hg.mozilla.org/mozilla-central/raw-file/default/python/mozboot/bin/bootstrap.py
-          # To use Git as your VCS
-          python3 bootstrap.py
-
-          # git clone https://github.com/mozilla/gecko-dev.git mozilla-unified --depth=1
-
-          cd mozilla-unified
-          # hg up -C central
-          sudo ./mach bootstrap
-          sudo ./mach build
           sudo apt install tree -y
-          tree ./ > tree.txt
+
+          cd /tmp/mozjz_build
+
+          tree -hs > ~/tree.txt
+
+          # rm -rf /tmp/mozjz_build/x86_64-unknown-linux-gnu
+          # rm -rf /tmp/mozjz_build/debug
+          rm -rf /tmp/mozjz_build/Test*
+          rm -rf /tmp/mozjz_build/*.py
+          rm -rf /tmp/mozjz_build/*-tests
+          rm -rf /tmp/mozjz_build/nsinstall
+
+
+          cd ~
+          tar -czf ~/spidermonkey-x86_64-unknown-linux-gnu.tar.gz -C /tmp/mozjz_build .
+      # - name: Upload Build Artifacts
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: tree
+      #     path: ~/tree.txt
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: spidermonkey-x86_64-unknown-linux-gnu
-          path: ./mozilla-unified/.mozbuild,./mozilla-unified/tree.txt
+          path: ~/spidermonkey-x86_64-unknown-linux-gnu.tar.gz
+
   build:
     needs: [
         "build-x86_64-unknown-linux-gnu",
@@ -95,9 +98,14 @@ jobs:
         # "build-macos-x86_64",
         # "build-macos-aarch64",
       ]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+
+      - name: sleep
+        run: |
+          sleep 60
+
       - name: Download All Artifacts
         uses: actions/download-artifact@v4
         with:
@@ -109,4 +117,4 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "spidermonkey/*.tar.gz"
+          artifacts: "git /*.tar.gz"
