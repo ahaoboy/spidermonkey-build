@@ -23,6 +23,7 @@ env:
 
 jobs:
   build-x86_64-unknown-linux-gnu:
+    if: false
     runs-on: ubuntu-24.04
 
     steps:
@@ -97,6 +98,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: download
         run: |
+          bash download.sh "jsshell-linux-x86_64.zip" x86_64-unknown-linux-gnu
           bash download.sh "jsshell-win64.zip" x86_64-pc-windows-msvc
           bash download.sh "jsshell-mac.zip" x86_64-apple-darwin
           bash download.sh "jsshell-mac.zip" aarch64-apple-darwin
@@ -119,9 +121,14 @@ jobs:
           name: spidermonkey-x86_64-apple-darwin
           path: spidermonkey-x86_64-apple-darwin.zip
 
+      - name: Upload spidermonkey-x86_64-unknown-linux-gnu
+        uses: actions/upload-artifact@v4
+        with:
+          name: spidermonkey-x86_64-unknown-linux-gnu
+          path: spidermonkey-x86_64-unknown-linux-gnu.zip
   build:
     needs: [
-        "build-x86_64-unknown-linux-gnu",
+        # "build-x86_64-unknown-linux-gnu",
         "download",
         # "build-windows",
         # "build-macos-x86_64",
