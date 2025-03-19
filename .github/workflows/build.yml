@@ -98,8 +98,8 @@ jobs:
       - name: download
         run: |
           bash download.sh "jsshell-win64.zip" x86_64-pc-windows-msvc
-          bash download.sh "mac.zip" x86_64-apple-darwin
-          bash download.sh "mac.zip" aarch64-apple-darwin
+          bash download.sh "jsshell-mac.zip" x86_64-apple-darwin
+          bash download.sh "jsshell-mac.zip" aarch64-apple-darwin
 
       - name: Upload x86_64-pc-windows-msvc
         uses: actions/upload-artifact@v4

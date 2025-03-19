@@ -50,4 +50,7 @@ fi
 ZIP_NAME="$1"
 TARGET="$2"
 URL="https://archive.mozilla.org/pub/firefox/releases/$version/jsshell/${ZIP_NAME}"
+
+echo $URL
+
 curl -L -o "spidermonkey-${TARGET}.zip" "$URL"
