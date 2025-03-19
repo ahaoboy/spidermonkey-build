@@ -58,18 +58,6 @@ OS=$(uname -s)
 
 mkdir "spidermonkey-unzip-${TARGET}"
 unzip "spidermonkey-${TARGET}.zip" -d "spidermonkey-unzip-${TARGET}"
-"./spidermonkey-unzip-${TARGET}/js" ./test.js
-OS="$(uname -s)"
 
-echo $OS
-
-case "${OS}" in
-   MINGW* | MSYS* | CYGWIN* | Win*)
-      echo "windows upload zip"
-      ;;
-   *)
-      chmod +x "spidermonkey-unzip-${TARGET}/js"
-      tar -czf "spidermonkey-${TARGET}.tar.gz" -C "spidermonkey-unzip-${TARGET}" .
-      "./spidermonkey-unzip-${TARGET}/js" ./test.js
-      ;;
-esac
+chmod +x "spidermonkey-unzip-${TARGET}/js"
+tar -czf "spidermonkey-${TARGET}.tar.gz" -C "spidermonkey-unzip-${TARGET}" .
